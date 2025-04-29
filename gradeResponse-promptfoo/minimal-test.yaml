@@ -1,0 +1,2 @@
+prompts: ['Hello world']
+providers: ['ollama:gemma2:2b']

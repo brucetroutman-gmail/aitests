@@ -1,0 +1,26 @@
+{
+  "name": "analyzetests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chart.js": "^4.4.9",
+    "chartjs-node-canvas": "^5.0.0",
+    "d3": "^7.9.0",
+    "fast-csv": "^5.0.2",
+    "fs-extra": "^11.3.0",
+    "ml-regression": "^6.2.0",
+    "node-schedule": "^2.1.1",
+    "papaparse": "^5.5.2",
+    "piscina": "^4.9.2",
+    "simple-statistics": "^7.8.8",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  }
+}

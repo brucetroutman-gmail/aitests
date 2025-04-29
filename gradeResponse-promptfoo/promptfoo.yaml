@@ -1,0 +1,82 @@
+
+# Promptfoo Configuration
+
+# Define providers (the models you want to use)
+providers:
+  - id: ollama-gemma
+    provider: ollama
+    model: gemma3:1b
+
+# Define the prompts to test
+prompts:
+  - file: prompt-system.txt
+    vars:
+      user_prompt: file:prompt-user.txt
+      response_to_evaluate: file:response.txt
+
+# Define test cases/scenarios
+tests:
+  - description: "Evaluate model response"
+    vars:
+      user_prompt: file:prompt-user.txt
+      response_to_evaluate: file:response.txt
+
+# Define the evaluation metrics
+evaluations:
+  - type: llm-rubric
+    provider: ollama-gemma
+    prompt: |
+      You are an expert evaluator tasked with grading a response based on five criteria: Factual Accuracy, Structured Response, Multiple Perspectives, Actionable Suggestions, and Reflection. Below are the definitions for each criterion and the scoring instructions.
+
+      ### Scoring Criteria Definitions
+      - **Factual Accuracy**: The degree to which the response contains correct, verifiable information supported by evidence or widely accepted knowledge. It should be free from errors, fabrications, or hallucinations and align with the prompt's context.
+        - Score 10: Entirely accurate with no errors or unsupported claims.
+        - Score 1: Major factual errors or fabrications dominate the response.
+      - **Structured Response**: The organization, clarity, and logical flow of the response. A well-structured response is coherent, easy to follow, and uses appropriate formatting (e.g., headings, bullet points) to present ideas systematically.
+        - Score 10: Exceptionally clear, logically organized, and well-formatted.
+        - Score 1: Disorganized, incoherent, or lacks any clear structure.
+      - **Multiple Perspectives**: The extent to which the response acknowledges and incorporates diverse viewpoints, stakeholders, or approaches relevant to the prompt. It should demonstrate inclusivity and avoid undue bias.
+        - Score 10: Fully incorporates diverse, relevant perspectives with balance.
+        - Score 1: Ignores alternative viewpoints or is heavily biased.
+      - **Actionable Suggestions**: The presence of practical, feasible recommendations or steps that users can realistically implement to address the prompt's query or problem.
+        - Score 10: Specific, realistic, and highly actionable suggestions.
+        - Score 1: No suggestions or entirely vague/impractical ones.
+      - **Reflection**: The response's ability to draw broader lessons, insights, or implications, connecting specific details to larger themes, trends, or universal principles.
+        - Score 10: Deep, insightful reflections with clear broader implications.
+        - Score 1: No reflection or superficial comments without depth.
+
+      ### Input
+      - **System Prompt**: {{prompt}}
+      - **User Prompt**: {{user_prompt}}
+      - **Response to Evaluate**: {{response_to_evaluate}}
+
+      ### Instructions
+      1. Evaluate the response based on the five criteria.
+      2. Assign a score from 1 to 10 for each criterion.
+      3. Provide a brief justification for each score.
+      4. Format your response as follows:
+
+      **Factual Accuracy**: [Score]/10
+      Justification: [Your reasoning]
+
+      **Structured Response**: [Score]/10
+      Justification: [Your reasoning]
+
+      **Multiple Perspectives**: [Score]/10
+      Justification: [Your reasoning]
+
+      **Actionable Suggestions**: [Score]/10
+      Justification: [Your reasoning]
+
+      **Reflection**: [Score]/10
+      Justification: [Your reasoning]
+
+      **Total Score**: [Total Score]/50
+      Overall Comments: [Optional brief summary or additional notes]
+
+# Output configuration
+output:
+  - format: json
+    file: "evaluation-results/results-{{DATE}}.json"
+  - format: html
+    file: "evaluation-results/report-{{DATE}}.html"
