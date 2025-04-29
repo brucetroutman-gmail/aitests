@@ -10,7 +10,7 @@
 
 7. node query-sqlite.mjs "select server,  Model_Name, duration, context, temp from performance order by duration asc"
 
-8. sqlite3 performance-data.db
+8. sqlite3 performance_data.db
 
 9. brew install db-browser-for-sqlite
 
