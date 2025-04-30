@@ -4,21 +4,37 @@ class Benchmark {
   constructor(name) {
     this.name = name;
     this.results = [];
+    this.successes = 0;
+    this.iterations = 0;
   }
 
   async run(fn, iterations = 1) {
     console.log(`Running benchmark: ${this.name}`);
+    this.iterations = iterations;
     
     // Warm-up run
-    await fn();
+    try {
+      await fn();
+    } catch (error) {
+      console.log(`  Warm-up failed: ${error.message}`);
+    }
     
     for (let i = 0; i < iterations; i++) {
       const start = performance.now();
-      await fn();
+      let success = false;
+      
+      try {
+        const result = await fn();
+        success = result === true || result === undefined ? true : !!result;
+        if (success) this.successes++;
+      } catch (error) {
+        console.log(`  Error in iteration ${i + 1}: ${error.message}`);
+      }
+      
       const end = performance.now();
       const duration = end - start;
       this.results.push(duration);
-      console.log(`  Iteration ${i + 1}/${iterations}: ${duration.toFixed(2)}ms`);
+      console.log(`  Iteration ${i + 1}/${iterations}: ${duration.toFixed(2)}ms - ${success ? 'Success' : 'Failed'}`);
     }
     
     this.summarize();
@@ -37,6 +53,7 @@ class Benchmark {
     
     console.log(`\nResults for ${this.name}:`);
     console.log(`  Iterations: ${this.results.length}`);
+    console.log(`  Successes: ${this.successes}/${this.iterations} (${(this.successes / this.iterations * 100).toFixed(1)}%)`);
     console.log(`  Average: ${avg.toFixed(2)}ms`);
     console.log(`  Min: ${min.toFixed(2)}ms`);
     console.log(`  Max: ${max.toFixed(2)}ms`);
@@ -81,10 +98,21 @@ class BenchmarkSuite {
     const fastest = sorted[0];
     const fastestAvg = fastest.results.reduce((sum, val) => sum + val, 0) / fastest.results.length;
     
+    console.log("\nPerformance ranking:");
     for (const benchmark of sorted) {
       const avg = benchmark.results.reduce((sum, val) => sum + val, 0) / benchmark.results.length;
       const ratio = avg / fastestAvg;
       console.log(`  ${benchmark.name}: ${avg.toFixed(2)}ms (${ratio.toFixed(2)}x ${benchmark === fastest ? 'fastest' : 'slower'})`);
+    }
+    
+    console.log("\nSuccess rate ranking:");
+    const successSorted = [...this.benchmarks].sort((a, b) => {
+      return (b.successes / b.iterations) - (a.successes / a.iterations);
+    });
+    
+    for (const benchmark of successSorted) {
+      const successRate = benchmark.successes / benchmark.iterations * 100;
+      console.log(`  ${benchmark.name}: ${benchmark.successes}/${benchmark.iterations} (${successRate.toFixed(1)}%)`);
     }
   }
 }

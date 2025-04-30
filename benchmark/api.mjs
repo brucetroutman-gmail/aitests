@@ -10,7 +10,7 @@ const BASE_URL = 'http://localhost:11434/api';
  */
 export async function getModels() {
   try {
-    const response = await fetch(`${BASE_URL}/tags`);
+    const response = await fetch(`${BASE_URL}/models`);
     
     if (!response.ok) {
       throw new Error(`Failed to get models: ${response.status} ${response.statusText}`);
@@ -33,14 +33,19 @@ export async function getModels() {
  */
 export async function runPrompt(model, prompt, options = {}) {
   try {
-    const response = await fetch(`${BASE_URL}/generate`, {
+    const response = await fetch(`${BASE_URL}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model,
-        prompt,
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
         ...options
       })
     });

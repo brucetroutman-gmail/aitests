@@ -1,0 +1,202 @@
+{
+  "gemma3:1b:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  },
+  "gemma3:4b:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  },
+  "granite3.1-dense:latest:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  },
+  "internlm2:latest:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  },
+  "llama3.1:8b:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  },
+  "llama3.2:3b:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  },
+  "mistral:latest:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  },
+  "phi3:latest:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  },
+  "phi4-mini:latest:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  },
+  "qwen2:0.5b:undefined": {
+    "Explain quantum computing in simple terms.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "Write a short poem about artificial intelligence.": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    },
+    "What are three ways to improve productivity?": {
+      "timeTaken": null,
+      "response": null,
+      "error": "Failed to run prompt: 404 Not Found",
+      "success": false
+    }
+  }
+}
