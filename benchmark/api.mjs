@@ -1,6 +1,6 @@
 // api.mjs
 
-import fetch from 'node-fetch';
+//import fetch from 'node-fetch';
 
 const BASE_URL = 'http://localhost:11434/api';
 
@@ -10,14 +10,14 @@ const BASE_URL = 'http://localhost:11434/api';
  */
 export async function getModels() {
   try {
-    const response = await fetch(`${BASE_URL}/models`);
+    const response = await fetch(`${BASE_URL}/tags`);
     
     if (!response.ok) {
       throw new Error(`Failed to get models: ${response.status} ${response.statusText}`);
     }
     
     const data = await response.json();
-    return data.models || [];
+    return data.models;  // The response format is { models: [...] }
   } catch (error) {
     console.error('Error fetching models:', error);
     throw error;
@@ -31,27 +31,29 @@ export async function getModels() {
  * @param {Object} options - Additional options for the model
  * @returns {Promise<Object>} The model's response
  */
+// Modified runPrompt function with more explicit parameters
 export async function runPrompt(model, prompt, options = {}) {
   try {
-    const response = await fetch(`${BASE_URL}/chat`, {
+    const requestBody = {
+      model: model,
+      prompt: prompt,
+      stream: false,  // Set to false for a complete response
+      ...options
+    };
+    
+    console.log('Request body:', JSON.stringify(requestBody, null, 2)); // Debug output
+    
+    const response = await fetch(`${BASE_URL}/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        model,
-        messages: [
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        ...options
-      })
+      body: JSON.stringify(requestBody)
     });
     
     if (!response.ok) {
-      throw new Error(`Failed to run prompt: ${response.status} ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Failed to run prompt: ${response.status} ${response.statusText} - ${errorText}`);
     }
     
     return await response.json();
@@ -60,3 +62,4 @@ export async function runPrompt(model, prompt, options = {}) {
     throw error;
   }
 }
+

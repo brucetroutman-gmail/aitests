@@ -14,7 +14,7 @@ async function runBenchmark() {
     
     // Filter models based on specific criteria
     const models = availableModels
-      .map(model => `${model.name}:${model.tag}`)
+      .map(model => `${model.name}`)
       .filter(modelString => {
         // Exclude models that are still downloading or have issues
         if (modelString.includes('partial')) return false;
