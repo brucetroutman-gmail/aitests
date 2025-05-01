@@ -8,13 +8,25 @@ async function runBenchmark() {
     console.log('Starting Ollama model benchmark...');
     
     // Get all available models
-    console.log('Fetching available models...');
-    const availableModels = await getModels();
-    console.log(`Found ${availableModels.length} total models`);
-    
-    // Filter models based on specific criteria
-    const models = availableModels
-      .map(model => `${model.name}`)
+console.log('Fetching available models...');
+const availableModels = await getModels();
+console.log(`Found ${availableModels.length} total models`);
+
+const models = availableModels
+  .map(model => {
+    // If model.name already includes a tag (has a colon)
+    if (model.name && model.name.includes(':')) {
+      return model.name;
+    }
+    // If there's a separate tag field
+    else if (model.tag) {
+      return `${model.name}:${model.tag}`;
+    }
+    // If there's no tag, just use the name
+    else {
+      return model.name;
+    }
+  })
       .filter(modelString => {
         // Exclude models that are still downloading or have issues
         if (modelString.includes('partial')) return false;

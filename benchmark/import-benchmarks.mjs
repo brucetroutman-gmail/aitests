@@ -1,5 +1,7 @@
-const fs = require('fs');
-const sqlite3 = require('sqlite3').verbose();
+import fs from 'fs';
+import sqlite3 from 'sqlite3';
+const { verbose } = sqlite3;
+const sqlite = verbose();
 
 // Function to create the database and import the JSON data
 async function importBenchmarkToSQLite(jsonFilePath, dbFilePath) {
@@ -8,7 +10,7 @@ async function importBenchmarkToSQLite(jsonFilePath, dbFilePath) {
     const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
     
     // Create/connect to SQLite database
-    const db = new sqlite3.Database(dbFilePath);
+    const db = new sqlite.Database(dbFilePath);
     
     // Run everything in a transaction for better performance
     await new Promise((resolve, reject) => {
@@ -57,12 +59,11 @@ async function importBenchmarkToSQLite(jsonFilePath, dbFilePath) {
         `);
         
         // Process each model in the JSON data
-        Object.keys(jsonData).forEach(modelName => {
+        Object.entries(jsonData).forEach(([modelName, prompts]) => {
           insertModel.run(modelName);
           
           // Process each prompt for the current model
-          Object.keys(jsonData[modelName]).forEach(promptText => {
-            const result = jsonData[modelName][promptText];
+          Object.entries(prompts).forEach(([promptText, result]) => {
             insertPrompt.run(promptText);
             
             // Insert the benchmark result
