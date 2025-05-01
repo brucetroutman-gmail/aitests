@@ -109,11 +109,11 @@ const models = availableModels
     for (const model in results) {
       const modelResults = results[model];
       const successCount = Object.values(modelResults).filter(r => r.success).length;
-      const avgTime = Object.values(modelResults)
+      const avgTime = (Object.values(modelResults) / 1000)
         .filter(r => r.timeTaken)
         .reduce((sum, r) => sum + r.timeTaken, 0) / successCount || 0;
       
-      console.log(`${model}: ${successCount}/${Object.keys(modelResults).length} successful, avg time: ${avgTime.toFixed(2)}ms`);
+      console.log(`${model}: ${successCount}/${Object.keys(modelResults).length} successful, avg time: ${avgTime.toFixed(2)} sec`);
     }
     
   } catch (error) {
