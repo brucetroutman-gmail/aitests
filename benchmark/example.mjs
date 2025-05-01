@@ -110,11 +110,9 @@ const models = availableModels
       const modelResults = results[model];
       const successCount = Object.values(modelResults).filter(r => r.success).length;
       const modelTimes = Object.values(modelResults);
+      // If modelTimes contains time values directly
       const avgTimeMs = modelTimes.reduce((sum, time) => sum + time, 0) / modelTimes.length;
-      const avgTime = (avgTimeMs / 1000)
-        .filter(r => r.timeTaken)
-        .reduce((sum, r) => sum + r.timeTaken, 0) / successCount || 0;
-      
+      const avgTimeSec = avgTimeMs / 1000;      
       console.log(`${model}: ${successCount}/${Object.keys(modelResults).length} successful, avg time: ${avgTime.toFixed(2)} sec`);
     }
     
