@@ -111,7 +111,7 @@ const models = availableModels
       const successCount = Object.values(modelResults).filter(r => r.success).length;
       const modelTimes = Object.values(modelResults);
       const avgTimeMs = modelTimes.reduce((sum, time) => sum + time, 0) / modelTimes.length;
-      const avgTime = avgTimeMs / 1000;
+      const avgTime = (avgTimeMs / 1000)
         .filter(r => r.timeTaken)
         .reduce((sum, r) => sum + r.timeTaken, 0) / successCount || 0;
       
