@@ -79,6 +79,7 @@ const models = availableModels
           
           const endTime = performance.now();
           const timeTaken = endTime - startTime;
+          timeTaken = (timeTaken/1000);
           
           results[model][prompt] = {
             timeTaken: timeTaken,
