@@ -113,7 +113,7 @@ const models = availableModels
       // If modelTimes contains time values directly
       const avgTimeMs = modelTimes.reduce((sum, time) => sum + time, 0) / modelTimes.length;
       const avgTimeSec = avgTimeMs / 1000;      
-      console.log(`${model}: ${successCount}/${Object.keys(modelResults).length} successful, avg time: ${avgTime.toFixed(2)} sec`);
+      console.log(`${model}: ${successCount}/${Object.keys(modelResults).length} successful, avg time: ${avgTimeSec.toFixed(2)} sec`);
     }
     
   } catch (error) {
