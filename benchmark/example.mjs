@@ -78,16 +78,15 @@ const models = availableModels
           });
           
           const endTime = performance.now();
-          const timeTaken = endTime - startTime;
-          timeTaken = (timeTaken/1000);
-          
+          const timeTaken = (endTime - startTime) / 1000;
+
           results[model][prompt] = {
             timeTaken: timeTaken,
             response: response.response || "No response",
             success: true
           };
           
-          console.log(`  ✓ Completed in ${timeTaken.toFixed(2)}ms`);
+          console.log(`  ✓ Completed in ${timeTaken.toFixed(2)} sec`);
         } catch (error) {
           console.error(`  ✗ Failed: ${error.message}`);
           results[model][prompt] = {
