@@ -172,3 +172,31 @@ export async function saveBenchmarkResults(benchmarkData, filePath) {
     throw error;
   }
 }
+
+export async function generateCompletion(modelName, prompt, options = {}) {
+  try {
+    const response = await fetch('http://localhost:11434/api/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: modelName,
+        prompt: prompt,
+        stream: false,
+        ...options
+      }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error generating completion:', error);
+    throw error;
+  }
+}
+
