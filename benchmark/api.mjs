@@ -164,13 +164,28 @@ export async function getModelInfo(modelName) {
  */
 export async function saveBenchmarkResults(benchmarkData, filePath) {
   try {
+    // Create a deep copy of the benchmark data to avoid modifying the original
+    const dataCopy = JSON.parse(JSON.stringify(benchmarkData));
+    
+    // Remove the context field from each benchmark result
+    if (Array.isArray(dataCopy)) {
+      dataCopy.forEach(item => {
+        if (item && item.context !== undefined) {
+          delete item.context;
+        }
+      });
+    } else if (dataCopy && dataCopy.context !== undefined) {
+      delete dataCopy.context;
+    }
+    
     const fs = await import('fs/promises');
-    await fs.writeFile(filePath, JSON.stringify(benchmarkData, null, 2));
+    await fs.writeFile(filePath, JSON.stringify(dataCopy, null, 2));
     console.log(`Benchmark results saved to ${filePath}`);
   } catch (error) {
     console.error('Error saving benchmark results:', error);
     throw error;
   }
 }
+
 
 
