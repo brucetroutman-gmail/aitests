@@ -167,16 +167,27 @@ export async function saveBenchmarkResults(benchmarkData, filePath) {
     // Create a deep copy of the benchmark data to avoid modifying the original
     const dataCopy = JSON.parse(JSON.stringify(benchmarkData));
     
+    console.log("Original structure:", JSON.stringify(benchmarkData).substring(0, 200) + "...");
+    
     // Remove the context field from each benchmark result
     if (Array.isArray(dataCopy)) {
-      dataCopy.forEach(item => {
+      console.log(`Processing array with ${dataCopy.length} items`);
+      dataCopy.forEach((item, index) => {
+        console.log(`Item ${index} keys:`, Object.keys(item));
         if (item && item.context !== undefined) {
+          console.log(`Deleting context from item ${index}`);
           delete item.context;
+          console.log(`After deletion, item ${index} keys:`, Object.keys(item));
         }
       });
     } else if (dataCopy && dataCopy.context !== undefined) {
+      console.log("Processing single object with keys:", Object.keys(dataCopy));
+      console.log("Deleting context from object");
       delete dataCopy.context;
+      console.log("After deletion, object keys:", Object.keys(dataCopy));
     }
+    
+    console.log("Modified structure check:", JSON.stringify(dataCopy).substring(0, 200) + "...");
     
     const fs = await import('fs/promises');
     await fs.writeFile(filePath, JSON.stringify(dataCopy, null, 2));
