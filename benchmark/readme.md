@@ -1,9 +1,15 @@
-npm init -y
+Install dependences:
 
-npm install sqlite
+    npm init -y
 
-npm install sqllite3
+    npm install sqlite
 
-run the import to sqlite:
+    npm install sqllite3
 
-node import-benchmarks.mjs benchmark-results-2025-04-30T16-26-02.399Z.json benchmarks-results.db
+Calculate times for all models:
+
+    node example.mjs
+
+Run the import to sqlite:
+
+    node import-benchmarks.mjs benchmark-results-2025-04-30T16-26-02.399Z.json benchmarks-results.db
