@@ -165,33 +165,24 @@ export async function getModelInfo(modelName) {
  * @returns {Promise<void>}
  */
 
-export async function saveBenchmarkResults(benchmarkData, filePath) {
+export async function saveBenchmarkResults(benchmarkResults, outputPath) {
   try {
-    // Create a deep copy of the benchmark data to avoid modifying the original
-    const dataCopy = JSON.parse(JSON.stringify(benchmarkData));
+    // Make a deep copy of the results to avoid modifying the original
+    const resultsCopy = JSON.parse(JSON.stringify(benchmarkResults));
     
-    console.log("Original structure:", JSON.stringify(benchmarkData).substring(0, 200) + "...");
-    
-    // Remove the context field from each benchmark result's response object in detailedResults
-    if (dataCopy.detailedResults && Array.isArray(dataCopy.detailedResults)) {
-      console.log(`Processing ${dataCopy.detailedResults.length} detailed results`);
-      
-      dataCopy.detailedResults.forEach((result, index) => {
-        if (result.response && result.response.context !== undefined) {
-          console.log(`Deleting context from result ${index}`);
-          delete result.response.context;
+    // Remove context field from each response in detailedResults
+    if (resultsCopy.detailedResults && Array.isArray(resultsCopy.detailedResults)) {
+      resultsCopy.detailedResults.forEach(item => {
+        if (item.response && item.response.context) {
+          delete item.response.context;
         }
       });
     }
     
-    console.log("Modified structure check:", JSON.stringify(dataCopy).substring(0, 200) + "...");
-    
-    const fs = await import('fs/promises');
-    await fs.writeFile(filePath, JSON.stringify(dataCopy, null, 2));
-    console.log(`Benchmark results saved to ${filePath}`);
+    // Write the modified results to the output file
+    await fs.promises.writeFile(outputPath, JSON.stringify(resultsCopy, null, 2));
+    console.log(`Benchmark results saved to ${outputPath}`);
   } catch (error) {
-    console.error('Error saving benchmark results:', error);
-    throw error;
+    console.error(`Error saving benchmark results: ${error}`);
   }
 }
-
