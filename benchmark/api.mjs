@@ -122,6 +122,8 @@ export async function runBenchmark(model, prompts, options = {}) {
       avgTokensPerPrompt: totalTokens / prompts.length,
       detailedResults: results
     };
+
+    await saveBenchmarkResults(benchmarkSummary, options.outputFile || `${model}-benchmark.json`);
     
     return benchmarkSummary;
   } catch (error) {
