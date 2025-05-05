@@ -101,7 +101,9 @@ const models = availableModels
     
     // Save results to file
     const timestamp = new Date().toISOString().replace(/:/g, '-');
-    await fs.writeFile(`benchmark-results-${timestamp}.json`, JSON.stringify(results, null, 2));
+    // Use your function that handles context removal:
+    const filename = `benchmark-results-${timestamp}.json`;
+    await saveBenchmarkResults(results, filename);
     console.log(`\nBenchmark complete! Results saved to benchmark-results-${timestamp}.json`);
     
     // Generate summary
