@@ -164,6 +164,7 @@ export async function getModelInfo(modelName) {
  * @param {string} filePath - Path to save the file
  * @returns {Promise<void>}
  */
+
 export async function saveBenchmarkResults(benchmarkData, filePath) {
   try {
     // Create a deep copy of the benchmark data to avoid modifying the original
@@ -171,22 +172,16 @@ export async function saveBenchmarkResults(benchmarkData, filePath) {
     
     console.log("Original structure:", JSON.stringify(benchmarkData).substring(0, 200) + "...");
     
-    // Remove the context field from each benchmark result
-    if (Array.isArray(dataCopy)) {
-      console.log(`Processing array with ${dataCopy.length} items`);
-      dataCopy.forEach((item, index) => {
-        console.log(`Item ${index} keys:`, Object.keys(item));
-        if (item && item.context !== undefined) {
-          console.log(`Deleting context from item ${index}`);
-          delete item.context;
-          console.log(`After deletion, item ${index} keys:`, Object.keys(item));
+    // Remove the context field from each benchmark result's response object in detailedResults
+    if (dataCopy.detailedResults && Array.isArray(dataCopy.detailedResults)) {
+      console.log(`Processing ${dataCopy.detailedResults.length} detailed results`);
+      
+      dataCopy.detailedResults.forEach((result, index) => {
+        if (result.response && result.response.context !== undefined) {
+          console.log(`Deleting context from result ${index}`);
+          delete result.response.context;
         }
       });
-    } else if (dataCopy && dataCopy.context !== undefined) {
-      console.log("Processing single object with keys:", Object.keys(dataCopy));
-      console.log("Deleting context from object");
-      delete dataCopy.context;
-      console.log("After deletion, object keys:", Object.keys(dataCopy));
     }
     
     console.log("Modified structure check:", JSON.stringify(dataCopy).substring(0, 200) + "...");
@@ -199,6 +194,4 @@ export async function saveBenchmarkResults(benchmarkData, filePath) {
     throw error;
   }
 }
-
-
 
