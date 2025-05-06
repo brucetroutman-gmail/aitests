@@ -1,7 +1,6 @@
 // example.mjs
 
 import { getModels, runPrompt } from './api.mjs';
-import { saveBenchmarkResults } from './api.mjs';
 
 async function runBenchmark() {
   try {
@@ -102,8 +101,17 @@ const models = availableModels
     // Save results to file
     const timestamp = new Date().toISOString().replace(/:/g, '-');
     // Use your function that handles context removal:
-    const filename = `benchmark-results-${timestamp}.json`;
-    await saveBenchmarkResults(results, filename);
+    // Create a deep copy and remove context fields
+    const processedResults = JSON.parse(JSON.stringify(results));
+    if (processedResults.detailedResults && Array.isArray(processedResults.detailedResults)) {
+      processedResults.detailedResults.forEach(result => {
+        if (result.response && result.response.context !== undefined) {
+          delete result.response.context;
+        }
+      });
+    }
+
+    await fs.writeFile(`benchmark-results-${timestamp}.json`, JSON.stringify(processedResults, null, 2));
     console.log(`\nBenchmark complete! Results saved to benchmark-results-${timestamp}.json`);
     
     // Generate summary

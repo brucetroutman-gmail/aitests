@@ -166,25 +166,3 @@ export async function getModelInfo(modelName) {
  * @param {string} filePath - Path to save the file
  * @returns {Promise<void>}
  */
-
-export async function saveBenchmarkResults(benchmarkResults, outputPath) {
-  try {
-    // Make a deep copy of the results to avoid modifying the original
-    const resultsCopy = JSON.parse(JSON.stringify(benchmarkResults));
-    
-    // Remove context field from each response in detailedResults
-    if (resultsCopy.detailedResults && Array.isArray(resultsCopy.detailedResults)) {
-      resultsCopy.detailedResults.forEach(item => {
-        if (item.response && item.response.context) {
-          delete item.response.context;
-        }
-      });
-    }
-    
-    // Write the modified results to the output file
-    await fs.promises.writeFile(outputPath, JSON.stringify(resultsCopy, null, 2));
-    console.log(`Benchmark results saved to ${outputPath}`);
-  } catch (error) {
-    console.error(`Error saving benchmark results: ${error}`);
-  }
-}
