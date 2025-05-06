@@ -3,6 +3,24 @@
 import { getModels, runPrompt } from './api.mjs';
 import fs from 'fs/promises';
 
+function formatTimestamp() {
+  const now = new Date();
+  
+  // Format as YY-MM-DD HH:MM:SS
+  const year = now.getFullYear().toString().slice(2); // Get last 2 digits of year
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+// Create the filename constant
+const timestamp = formatTimestamp();
+const benchmarkFilename = `benchmark-results-${timestamp}.json`;
+
 async function runBenchmark() {
   try {
     console.log('Starting Ollama model benchmark...');
@@ -104,6 +122,7 @@ const models = availableModels
     // Use your function that handles context removal:
     // Create a deep copy and remove context fields
     const processedResults = JSON.parse(JSON.stringify(results));
+/*
     if (processedResults.detailedResults && Array.isArray(processedResults.detailedResults)) {
       processedResults.detailedResults.forEach(result => {
         if (result.response) {
@@ -126,8 +145,11 @@ const models = availableModels
         }
       });
     }
+*/
 
-    await fs.writeFile(`benchmark-results-${timestamp}.json`, JSON.stringify(processedResults, null, 2));
+await fs.writeFile(benchmarkFilename, JSON.stringify(results, null, 2));
+
+await removeContextFromJsonFile(benchmarkFilename);
 
     console.log(`\nBenchmark complete! Results saved to benchmark-results-${timestamp}.json`);
     
@@ -144,6 +166,51 @@ const models = availableModels
     
   } catch (error) {
     console.error('Benchmark failed:', error);
+  }
+}
+
+
+/**
+ * Removes all "context" fields from a JSON file after it has been written
+ * @param {string} filePath - Path to the JSON file
+ * @returns {Promise<void>}
+ */
+async function removeContextFromJsonFile(filePath) {
+  try {
+    // Read the file
+    const fileContent = await fs.readFile(filePath, 'utf8');
+    
+    // Parse the JSON
+    const data = JSON.parse(fileContent);
+    
+    // Function to recursively remove context fields from an object
+    function removeContextField(obj) {
+      if (!obj || typeof obj !== 'object') return;
+      
+      if (Array.isArray(obj)) {
+        obj.forEach(item => removeContextField(item));
+      } else {
+        if (obj.response && obj.response.context) {
+          delete obj.response.context;
+        }
+        
+        // Process all other object properties recursively
+        Object.values(obj).forEach(value => {
+          if (typeof value === 'object' && value !== null) {
+            removeContextField(value);
+          }
+        });
+      }
+    }
+    
+    // Remove context fields
+    removeContextField(data);
+    
+    // Write the cleaned data back to the file
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
+    console.log(`Successfully removed context fields from ${filePath}`);
+  } catch (error) {
+    console.error(`Error removing context fields: ${error.message}`);
   }
 }
 
