@@ -1,6 +1,7 @@
 // example.mjs
 
 import { getModels, runPrompt } from './api.mjs';
+import fs from 'fs/promises';
 
 async function runBenchmark() {
   try {

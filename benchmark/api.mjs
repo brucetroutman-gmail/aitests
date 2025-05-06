@@ -1,7 +1,7 @@
 // api.mjs
 
 //import fetch from 'node-fetch';
-import fs from 'fs/promises';
+
 
 
 const BASE_URL = 'http://localhost:11434/api';
