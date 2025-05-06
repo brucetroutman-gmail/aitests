@@ -106,13 +106,14 @@ const models = availableModels
     const processedResults = JSON.parse(JSON.stringify(results));
     if (processedResults.detailedResults && Array.isArray(processedResults.detailedResults)) {
       processedResults.detailedResults.forEach(result => {
-        if (result.response && result.response.context !== undefined) {
-          delete result.response.context;
+        if (result.context !== undefined) {
+          delete result.context;
         }
       });
     }
 
     await fs.writeFile(`benchmark-results-${timestamp}.json`, JSON.stringify(processedResults, null, 2));
+
     console.log(`\nBenchmark complete! Results saved to benchmark-results-${timestamp}.json`);
     
     // Generate summary
