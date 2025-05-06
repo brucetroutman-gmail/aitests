@@ -106,8 +106,23 @@ const models = availableModels
     const processedResults = JSON.parse(JSON.stringify(results));
     if (processedResults.detailedResults && Array.isArray(processedResults.detailedResults)) {
       processedResults.detailedResults.forEach(result => {
-        if (result.context !== undefined) {
-          delete result.context;
+        if (result.response) {
+          // Find and remove any "context" field at the response level
+          if (result.response.context !== undefined) {
+            delete result.response.context;
+          }
+          
+          // Alternative approach: remove any field between done_reason and total_duration
+          const keys = Object.keys(result.response);
+          const doneReasonIndex = keys.indexOf("done_reason");
+          const totalDurationIndex = keys.indexOf("total_duration");
+          
+          if (doneReasonIndex !== -1 && totalDurationIndex !== -1 && doneReasonIndex < totalDurationIndex) {
+            // Remove all fields between done_reason and total_duration
+            for (let i = doneReasonIndex + 1; i < totalDurationIndex; i++) {
+              delete result.response[keys[i]];
+            }
+          }
         }
       });
     }
