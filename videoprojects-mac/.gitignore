@@ -1,0 +1,6 @@
+.DS_Store
+*.tmp
+node_modules
+*.bin
+*.sqlite3
+chroma.log

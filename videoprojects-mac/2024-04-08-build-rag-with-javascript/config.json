@@ -1,0 +1,4 @@
+{
+  "embedmodel": "nomic-embed-text", 
+  "mainmodel": "llama3.2:3b" 
+}

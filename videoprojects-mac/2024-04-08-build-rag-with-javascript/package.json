@@ -1,0 +1,13 @@
+{
+  "name": "2024-04-08-build-rag-with-javascript",
+  "type": "module",
+  "main": "search.js",
+  "dependencies": {
+    "@lancedb/lancedb": "^0.19.0",
+    "chromadb": "^1.8.1",
+    "html-to-text": "^9.0.5",
+    "matts-llm-tools": "^0.0.2",
+    "ollama": "^0.5.0",
+    "pg": "^8.15.6"
+  }
+}

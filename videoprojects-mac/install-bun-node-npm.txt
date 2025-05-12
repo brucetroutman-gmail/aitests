@@ -1,0 +1,36 @@
+--install Brew
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew --version
+
+--install Git
+
+brew install git
+git --version
+
+--install nvs
+
+brew install nvs
+
+nvs --version
+nvs (select version)
+nvs link
+
+--install bun
+
+brew tap oven-sh/bun
+brew install bun
+bun --version
+
+update .zprofile
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="/Users/macstudio/Library/Python/3.9/bin:$PATH"
+export NVS_HOME="$HOME/.nvs"
+[ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
+
+Copy  
+Visual Studio code.app
+~/Library/Application Support/Code (contains settings and extensions)
+~/.vscode (may contain additional configurations)
