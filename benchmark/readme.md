@@ -1,3 +1,5 @@
+Update for mysql
+
 Install dependences:
 
     npm init -y
