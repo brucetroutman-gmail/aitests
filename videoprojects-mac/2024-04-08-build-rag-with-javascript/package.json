@@ -7,7 +7,7 @@
     "chromadb": "^1.8.1",
     "html-to-text": "^9.0.5",
     "matts-llm-tools": "^0.0.2",
-    "ollama": "^0.5.0",
+    "ollama": "^0.5.15",
     "pg": "^8.15.6"
   }
 }

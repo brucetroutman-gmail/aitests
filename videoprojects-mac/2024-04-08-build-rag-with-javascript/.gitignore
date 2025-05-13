@@ -1,5 +1,11 @@
 # Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 
+# LanceDB files
+
+lancedb/documents_vector_store.lance/_transactions/
+lancedb/documents_vector_store.lance/_versions/
+lancedb/documents_vector_store.lance/data/
+
 # Logs
 
 logs
