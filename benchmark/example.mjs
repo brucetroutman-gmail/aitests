@@ -14,12 +14,12 @@ function formatTimestamp() {
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const seconds = String(now.getSeconds()).padStart(2, '0');
   
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}${month}${day}-${hours}${minutes}${seconds}`;
 }
 
 // Create the filename constant
 const timestamp = formatTimestamp();
-const benchmarkFilename = `benchmark-results-${timestamp}.json`;
+const benchmarkFilename = `bench-results-${timestamp}.json`;
 
 async function runBenchmark() {
   try {
