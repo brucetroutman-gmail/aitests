@@ -19,7 +19,7 @@ function formatTimestamp() {
 
 // Create the filename constant
 const timestamp = formatTimestamp();
-const benchmarkFilename = `bench-results-${timestamp}.json`;
+const benchmarkFilename = `benc-resu-${timestamp}.json`;
 
 async function runBenchmark() {
   try {
