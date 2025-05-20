@@ -1,121 +1,113 @@
 {
   "Context": {
-    "mean": 8512.231884057972,
-    "min": 2048,
-    "max": 31072,
-    "count": 138,
-    "median": 2048,
-    "percentile95": 31072
+    "mean": 6800,
+    "min": 4000,
+    "max": 16000,
+    "count": 270,
+    "median": 4000,
+    "percentile95": 16000
   },
-  "Temp": {
-    "mean": 0.4835507246376818,
-    "min": 0.07,
+  " Temp": {
+    "mean": 0.5166666666666648,
+    "min": 0.3,
     "max": 0.9,
-    "count": 138,
+    "count": 270,
     "median": 0.6,
     "percentile95": 0.9
   },
-  "Duration": {
-    "mean": 16.54420289855073,
-    "min": 2.02,
-    "max": 229.16,
-    "count": 138,
-    "median": 10.21,
-    "percentile95": 55.87
+  "TPS": {
+    "mean": 262.00166666666684,
+    "min": 117.81,
+    "max": 319.92,
+    "count": 270,
+    "median": 269.61,
+    "percentile95": 305.55
   },
-  "Eval Tokens": {
-    "mean": 1622.1014492753623,
-    "min": 40,
+  "  Duration": {
+    "mean": 2.5718888888888896,
+    "min": 0.19,
+    "max": 9.5,
+    "count": 270,
+    "median": 2.0949999999999998,
+    "percentile95": 5.49
+  },
+  " Sc": {
+    "mean": 4.277777777777778,
+    "min": 0,
+    "max": 9,
+    "count": 270,
+    "median": 6,
+    "percentile95": 9
+  },
+  " or": {
+    "mean": 4.088888888888889,
+    "min": 0,
+    "max": 9,
+    "count": 270,
+    "median": 7,
+    "percentile95": 9
+  },
+  " es": {
+    "mean": 4.522222222222222,
+    "min": 0,
+    "max": 10,
+    "count": 270,
+    "median": 7,
+    "percentile95": 10
+  },
+  "      Date Time   ": {
+    "mean": 2025,
+    "min": 2025,
     "max": 2025,
-    "count": 138,
+    "count": 270,
     "median": 2025,
     "percentile95": 2025
   },
-  "QPC": {
-    "mean": 817.5688073394496,
-    "min": 270,
-    "max": 4779,
-    "count": 109,
-    "median": 666,
-    "percentile95": 1623
+  "Model User Prompt": {
+    "mean": 467.6777777777778,
+    "min": 23,
+    "max": 1011,
+    "count": 270,
+    "median": 465,
+    "percentile95": 748
   },
-  "Eval Duration": {
-    "mean": 4.575862068965518,
-    "min": 1.78,
-    "max": 10.61,
-    "count": 29,
-    "median": 3.58,
-    "percentile95": 9.74
+  "Eval Tokens": {
+    "mean": 1.870222222222223,
+    "min": 0.1,
+    "max": 5.25,
+    "count": 270,
+    "median": 1.795,
+    "percentile95": 3.33
   },
   "Prompt Eval Tokens": {
-    "mean": 24.793188405797103,
-    "min": 1.67,
-    "max": 189.71,
-    "count": 138,
-    "median": 13.51,
-    "percentile95": 59.02
+    "mean": 56.522222222222226,
+    "min": 32,
+    "max": 79,
+    "count": 270,
+    "median": 61,
+    "percentile95": 78
   },
-  "Tokens Per Second": {
-    "mean": 61.85797101449275,
-    "min": 21.51,
-    "max": 86,
-    "count": 138,
-    "median": 69.5,
-    "percentile95": 86
-  },
-  "Web Search": {
-    "mean": 59.784862385321084,
-    "min": 8.56,
-    "max": 161.87,
-    "count": 109,
-    "median": 67.79,
-    "percentile95": 72.09
-  },
-  "Web Search URL": {
+  "Doc-File Name          ": {
     "mean": 0,
     "min": 0,
     "max": 0,
-    "count": 29,
+    "count": 270,
     "median": 0,
     "percentile95": 0
   },
-  "CPU_GPU": {
+  "Web Search URL         ": {
     "mean": 0,
     "min": 0,
     "max": 0,
-    "count": 29,
+    "count": 270,
     "median": 0,
     "percentile95": 0
   },
-  "OS": {
-    "mean": 3.36231884057971,
-    "min": 0,
-    "max": 16,
-    "count": 138,
-    "median": 0,
-    "percentile95": 16
-  },
-  "Computer": {
-    "mean": 0,
-    "min": 0,
-    "max": 0,
-    "count": 109,
-    "median": 0,
-    "percentile95": 0
-  },
-  "Response File": {
-    "mean": 56.72727272727273,
-    "min": 16,
-    "max": 64,
-    "count": 99,
-    "median": 64,
-    "percentile95": 64
-  },
-  "__parsed_extra": {
+  "Computer ": {
     "mean": 32,
     "min": 32,
     "max": 32,
-    "count": 10,
+    "count": 270,
     "median": 32,
     "percentile95": 32
   }
