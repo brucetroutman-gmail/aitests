@@ -47,36 +47,32 @@ function formatDuration(ns) {
 async function evaluateResponse(modelName, userPrompt, systemPrompt, response) {
   const evaluationPrompt = `
 You are an expert evaluator tasked with grading a response based on three criteria: Accuracy, Relevance, and Coherence. Below are the definitions for each criterion and the scoring instructions.
-
 ### Scoring Criteria Definitions
--##Accuracy (1-10)
-The degree to which the response contains correct, verifiable information supported by evidence or widely accepted knowledge. It should be free from errors, fabrications, or hallucinations and align with the prompt's context.
+-##Accurate (1-5)
+The degree to which the response contains correct, verifiable information supported by evidence or widely accepted knowledge.
 
-Score 10: Entirely accurate with no errors or unsupported claims. All information is verifiable and precisely addresses the prompt's requirements.
-Score 8-9: Highly accurate with minimal errors that don't impact the overall value of the response.
-Score 6-7: Generally accurate with a few minor errors or slightly unsupported assertions.
-Score 4-5: Mixed accuracy with some correct information alongside noticeable errors or unverifiable claims.
-Score 2-3: Predominantly inaccurate with occasional correct information.
-Score 1: Major factual errors or fabrications dominate the response.
+Score 5: Entirely accurate with no errors. All information is verifiable and precisely addresses requirements.
+Score 4: Highly accurate with minimal errors that don't impact overall value.
+Score 3: Generally accurate with a few minor errors or slightly unsupported assertions.
+Score 2: Mixed accuracy with noticeable errors or unverifiable claims alongside correct information.
+Score 1: Predominantly inaccurate with major factual errors or fabrications.
 
--##Relevance (1-10)
-The extent to which the response directly addresses the prompt, includes necessary information, and excludes unnecessary content.
+-##Relevant (1-5)
+The extent to which the response directly addresses the prompt and includes necessary information.
 
-Score 10: Answer fully addresses the prompt, is concise, and has very little unnecessary information.
-Score 8-9: Response addresses the core of the prompt with minimal tangential information.
-Score 6-7: Response mostly addresses the prompt but includes some unnecessary information or misses minor aspects.
-Score 4-5: Response partially addresses the prompt with significant omissions or contains substantial irrelevant information.
-Score 2-3: Response barely addresses the prompt, focusing mostly on tangential information.
-Score 1: Response does not address the prompt or is overwhelmed with irrelevant information.
+Score 5: Answer fully addresses the prompt, is concise, with minimal unnecessary information.
+Score 4: Response addresses the core of the prompt with little tangential information.
+Score 3: Response mostly addresses the prompt but includes some unnecessary information.
+Score 2: Response partially addresses the prompt with significant omissions or irrelevant content.
+Score 1: Response barely addresses or misses the prompt entirely.
 
--##Coherence (1-10)
-The logical structure, organization, and flow of the response, including appropriate formatting and clarity of expression.
+-##Organized (1-5)
+The logical structure, organization, and flow of the response.
 
-Score 10: Exceptionally clear, logically organized, and well-formatted with perfect flow between ideas.
-Score 8-9: Very clear structure with strong logical flow and appropriate formatting throughout.
-Score 6-7: Generally clear organization with a few awkward transitions or minor formatting issues.
-Score 4-5: Somewhat organized but with noticeable logical gaps, confusing transitions, or inconsistent formatting.
-Score 2-3: Poorly organized with frequent logical breaks and difficult-to-follow structure.
+Score 5: Exceptionally clear, logically organized, with perfect flow between ideas.
+Score 4: Very clear structure with strong logical flow throughout.
+Score 3: Generally clear organization with a few awkward transitions or minor issues.
+Score 2: Somewhat organized but with noticeable logical gaps or confusing structure.
 Score 1: Disorganized, incoherent, or lacks any clear structure.
 
 ### Input
@@ -86,20 +82,20 @@ Score 1: Disorganized, incoherent, or lacks any clear structure.
 
 ### Instructions
 1. Evaluate the response based on the three criteria.
-2. Assign a score from 1 to 10 for each criterion.
+2. Assign a score from 1 to 5 for each criterion.
 3. Provide a brief justification for each score.
-4. If a criterion is not applicable (e.g., no suggestions requested), state this in the justification and assign a 0/10.
+4. If a criterion is not applicable (e.g., no suggestions requested), state this in the justification and assign a 0/5.
 5. Format the output as follows:
 
 ### Evaluation for Response
 
-**Accuracy**: [Score]  
+**Accurate**: [Score]  
 Justification: [Your reasoning]
 
-**Relevance**: [Score]  
+**Relevant**: [Score]  
 Justification: [Your reasoning]
 
-**Coherence**: [Score]  
+**Organization**: [Score]  
 Justification: [Your reasoning]
 
 **Total Score**: [Total Score]  
@@ -211,11 +207,11 @@ async function main() {
         scoreCount++;
         scores.push({ criteria: match[1], score });
         
-        // Create a new regex pattern for each match to avoid double "/10"
-        const fullPattern = new RegExp(`\\*\\*${match[1]}\\*\\*: ${match[2]}(?:\\s*\\/\\s*10)?`, 'g');
+        // Create a new regex pattern for each match to avoid double "/5"
+        const fullPattern = new RegExp(`\\*\\*${match[1]}\\*\\*: ${match[2]}(?:\\s*\\/\\s*5)?`, 'g');
         formattedEvaluation = formattedEvaluation.replace(
           fullPattern,
-          `**${match[1]}**: ${score}/10`
+          `**${match[1]}**: ${score}/5`
         );
       }
     }
@@ -257,7 +253,7 @@ async function main() {
     }
 
     // Format total score as scoretotal/30
-    const formattedTotalScore = `${totalScore}/30`;
+    const formattedTotalScore = `${totalScore}/15`;
 
     // Update or append Total Score in the output
     if (formattedEvaluation.includes('**Total Score**')) {
@@ -300,13 +296,13 @@ eval rate:            ${(metrics.eval_count / (metrics.eval_duration / 1e9)).toF
     // Write to file with total score and duration in name
     const dateStr = getFormattedDate();
     const totalDurationSeconds = Math.round(metrics.total_duration / 1e9); // Convert nanoseconds to seconds and round
-    const outputFileName = `GradedResponse_${totalScore}${justFlag}_${totalDurationSeconds}_${args.modelName.replace(':', '_')}_${dateStr}.txt`;
+    const outputFileName = `scoredResponse_${totalScore}${justFlag}_${totalDurationSeconds}_${args.modelName.replace(':', '_')}_${dateStr}.txt`;
     const outputPath = path.join(__dirname, outputFileName);
     await fs.writeFile(outputPath, finalOutput);
     console.log(`Evaluation written to ${outputFileName}`);
 
     // Export the result as JSON
-    const jsonFileName = `GradedResponse_${totalScore}${justFlag}_${totalDurationSeconds}_${args.modelName.replace(':', '_')}_${dateStr}.json`;
+    const jsonFileName = `scoredResponse_${totalScore}${justFlag}_${totalDurationSeconds}_${args.modelName.replace(':', '_')}_${dateStr}.json`;
     const jsonPath = path.join(__dirname, jsonFileName);
     await fs.writeFile(jsonPath, JSON.stringify(resultObject, null, 2));
     console.log(`JSON result written to ${jsonFileName}`);
