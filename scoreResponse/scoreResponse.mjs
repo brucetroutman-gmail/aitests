@@ -1,14 +1,50 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import ollama from 'ollama'; // Correct import for ollama package
+import ollama from 'ollama';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Function to get pc_no from hardware serial number
+async function getPCNumber() {
+  try {
+    // Use the child_process module to execute system commands
+    const { execSync } = await import('child_process');
+    let serialNumber;
+    
+    // Different commands for different OS
+    if (process.platform === 'win32') {
+      // For Windows - get BIOS serial number
+      const output = execSync('wmic bios get serialnumber').toString().trim();
+      serialNumber = output.split('\n')[1].trim(); // Extract the serial number
+    } else if (process.platform === 'darwin') {
+      // For macOS - get hardware serial
+      serialNumber = execSync("system_profiler SPHardwareDataType | grep 'Serial Number' | awk '{print $4}'").toString().trim();
+    } else {
+      // For Linux - try to get system serial from DMI
+      serialNumber = execSync("sudo dmidecode -s system-serial-number").toString().trim();
+    }
+    
+    if (!serialNumber || serialNumber === 'To be filled by O.E.M.' || serialNumber === 'System Serial Number') {
+      throw new Error('Could not determine valid serial number');
+    }
+    
+    // Create pc_no from first 3 and last 3 characters of the serial number
+    const cleanSerial = serialNumber.replace(/[^a-zA-Z0-9]/g, ''); // Remove special characters
+    const pcNo = cleanSerial.substring(0, 3) + cleanSerial.substring(cleanSerial.length - 3);
+    
+    return pcNo;
+  } catch (error) {
+    console.error(`Error getting serial number: ${error.message}`);
+    return 'UNKNOWN'; // Fallback value
+  }
+}
+
+
 // Function to read file content
 async function readFileContent(fileName) {
-  const filePath = path.join(__dirname, fileName); // Files are in the same directory as the script
+  const filePath = path.join(__dirname, fileName);
   try {
     return await fs.readFile(filePath, 'utf-8');
   } catch (error) {
@@ -19,7 +55,7 @@ async function readFileContent(fileName) {
 // Function to format current date as YYMMDD-MMSS
 function getFormattedDate() {
   const now = new Date();
-  const year = now.getFullYear().toString().slice(-2); // Last two digits of year
+  const year = now.getFullYear().toString().slice(-2);
   const month = (now.getMonth() + 1).toString().padStart(2, '0');
   const day = now.getDate().toString().padStart(2, '0');
   const hours = now.getHours().toString().padStart(2, '0');
@@ -32,16 +68,19 @@ async function checkOllamaServer() {
   try {
     await ollama.list(); // Check if server is reachable
     console.log('Ollama server is reachable.');
+    console.log('Debug: Adding debug checkpoint after server check');
   } catch (error) {
     throw new Error(`Ollama server is not running or unreachable: ${error.message}`);
   }
 }
 
+
 // Function to format duration (nanoseconds to seconds or milliseconds)
 function formatDuration(ns) {
-  if (ns < 1e6) return `${(ns / 1e6).toFixed(3)}ms`;
-  return `${(ns / 1e9).toFixed(3)}s`;
+  if (ns < 1e6) return `${(ns / 1e6).toFixed(2)}ms`;
+  return `${(ns / 1e9).toFixed(2)}`;
 }
+
 
 // Function to evaluate response using Ollama
 async function evaluateResponse(modelName, userPrompt, systemPrompt, response) {
@@ -134,184 +173,101 @@ function parseArgs() {
   return args;
 }
 
-// Extract justifications and create structured object from evaluation text
-function extractJustifications(evaluation) {
-  const result = {
-    scores: {},
-    justifications: {},
-    totalScore: 0,
-    overallComments: '',
-  };
-
-  // Extract individual criteria scores and justifications
-  const criteriaMatches = [...evaluation.matchAll(/\*\*(\w+\s*\w*)\*\*: (\d+)(?:\/10)?\s*\nJustification: (.*?)(?=\n\n|\n\*\*|\n$)/gs)];
+// Extract scores from evaluation text
+function extractScores(evaluation) {
+  const scores = {};
+  const scoreRegex = /\*\*(Accurate|Relevant|Organization)\*\*: (\d+)/g;
   
-  criteriaMatches.forEach(match => {
-    const criteria = match[1];
-    // Skip Total Score as we'll calculate it
-    if (criteria !== 'Total Score') {
-      const score = parseInt(match[2], 10);
-      const justification = match[3].trim();
-      
-      result.scores[criteria] = score;
-      result.justifications[criteria] = justification;
-      result.totalScore += score;
-    }
-  });
-
-  // Extract overall comments if available
-  const commentsMatch = evaluation.match(/Overall Comments: (.*?)(?=\n\*\*|\n$)/s);
-  if (commentsMatch) {
-    result.overallComments = commentsMatch[1].trim();
+  let match;
+  while ((match = scoreRegex.exec(evaluation)) !== null) {
+    const criterion = match[1].toLowerCase();
+    scores[criterion] = parseInt(match[2], 10);
   }
-
-  return result;
+  
+  return scores;
 }
 
-// Main function that now returns an object
+// Main function
 async function main() {
   // Parse arguments
   const args = parseArgs();
+  console.log('Debug: Arguments parsed:', args);
   
   if (!args.modelName) {
-    console.error('Please provide an Ollama model name (e.g., node gradeResponse.mjs gemma2:2b [--no-justification])');
+    console.error('Please provide an Ollama model name (e.g., node scoreResponse.mjs gemma2:2b)');
     process.exit(1);
   }
 
   try {
     // Check Ollama server
+    console.log('Debug: Checking Ollama server...');
     await checkOllamaServer();
 
+    // Get pc_no
+    console.log('Debug: Getting pc_no...');
+    const pcNo = await getPCNumber();
+    console.log('Debug: pc_no obtained:', pcNo);
+
     // Read input files
+    console.log('Debug: Reading input files...');
     const userPrompt = await readFileContent('prompt-user.txt');
+    console.log('Debug: User prompt loaded, length:', userPrompt.length);
+    
     const systemPrompt = await readFileContent('prompt-system.txt');
+    console.log('Debug: System prompt loaded, length:', systemPrompt.length);
+    
     const response = await readFileContent('response.txt');
+    console.log('Debug: Response loaded, length:', response.length);
 
     // Evaluate response
+    console.log('Debug: Starting evaluation with model:', args.modelName);
     const { content: evaluation, metrics } = await evaluateResponse(args.modelName, userPrompt, systemPrompt, response);
+    console.log('Debug: Evaluation completed, response length:', evaluation.length);
 
-    // Parse and reformat scores
-    const scoreRegex = /\*\*(\w+\s*\w*)\*\*: (\d+)(?:\s*\/\s*10)?/g;
-    let totalScore = 0;
-    let scoreCount = 0;
-    let formattedEvaluation = evaluation;
-    const scores = [];
-
-    // Collect scores and reformat
-    let match;
-    while ((match = scoreRegex.exec(evaluation)) !== null) {
-      // Skip "Total Score" during the regex collection phase
-      if (match[1] !== 'Total Score') {
-        const score = parseInt(match[2], 10);
-        totalScore += score;
-        scoreCount++;
-        scores.push({ criteria: match[1], score });
-        
-        // Create a new regex pattern for each match to avoid double "/5"
-        const fullPattern = new RegExp(`\\*\\*${match[1]}\\*\\*: ${match[2]}(?:\\s*\\/\\s*5)?`, 'g');
-        formattedEvaluation = formattedEvaluation.replace(
-          fullPattern,
-          `**${match[1]}**: ${score}/5`
-        );
-      }
-    }
-
-    // Extract structured data from the evaluation
-    const evaluationData = extractJustifications(evaluation);
-
-    // Create a structured result object
-    const resultObject = {
+    // Extract scores
+    console.log('Debug: Extracting scores from evaluation...');
+    const scores = extractScores(evaluation);
+    console.log('Debug: Extracted scores:', scores);
+    
+    // Create simplified result object with pc_no as the first element
+    console.log('Debug: Creating simplified result object...');
+    const simplifiedResult = {
+      pc_no: pcNo,
       modelName: args.modelName,
+      datetime: new Date().toISOString(),
       scores: {
-        ...evaluationData.scores,
-        totalScore: totalScore
+        accurate: scores.accurate || 0,
+        relevant: scores.relevant || 0,
+        organized: scores.organization || 0
       },
-      justifications: evaluationData.justifications,
-      overallComments: evaluationData.overallComments || `Evaluation completed using ${args.modelName}.`,
-      metrics: {
-        totalDuration: metrics.total_duration,
-        totalDurationFormatted: formatDuration(metrics.total_duration),
-        loadDuration: metrics.load_duration,
-        loadDurationFormatted: formatDuration(metrics.load_duration),
+      performanceMetrics: {
+        totalDuration: formatDuration(metrics.total_duration),
+        loadDuration: formatDuration(metrics.load_duration),
         promptEvalCount: metrics.prompt_eval_count,
-        promptEvalDuration: metrics.prompt_eval_duration,
-        promptEvalDurationFormatted: formatDuration(metrics.prompt_eval_duration),
+        promptEvalDuration: formatDuration(metrics.prompt_eval_duration),
         promptEvalRate: (metrics.prompt_eval_count / (metrics.prompt_eval_duration / 1e9)).toFixed(2),
         evalCount: metrics.eval_count,
-        evalDuration: metrics.eval_duration,
-        evalDurationFormatted: formatDuration(metrics.eval_duration),
+        evalDuration: formatDuration(metrics.eval_duration),
         evalRate: (metrics.eval_count / (metrics.eval_duration / 1e9)).toFixed(2)
-      },
-      rawEvaluation: evaluation,
-      timestamp: new Date().toISOString()
+      }
     };
+    console.log('Debug: Simplified result object created:', JSON.stringify(simplifiedResult, null, 2));
 
-    // Validate that we have exactly 3 scores
-    if (scoreCount !== 3) {
-      console.warn('Warning: Expected 3 scores, but found', scoreCount);
-      resultObject.warning = `Expected 3 scores, but found ${scoreCount}`;
-    }
-
-    // Format total score as scoretotal/30
-    const formattedTotalScore = `${totalScore}/15`;
-
-    // Update or append Total Score in the output
-    if (formattedEvaluation.includes('**Total Score**')) {
-      formattedEvaluation = formattedEvaluation.replace(
-        /\*\*Total Score\*\*: .+/,
-        `**Total Score**: ${formattedTotalScore}`
-      );
-    } else {
-      formattedEvaluation += `\n**Total Score**: ${formattedTotalScore}`;
-    }
-
-    // Remove justifications if flag is set
-    if (!args.showJustification) {
-      formattedEvaluation = formattedEvaluation.replace(/Justification: .+?\n\n/gs, '\n');
-    }
-
-    // Format metrics
-    const metricsOutput = `
-**Performance Metrics**:
-total duration:       ${formatDuration(metrics.total_duration)}
-load duration:        ${formatDuration(metrics.load_duration)}
-prompt eval count:    ${metrics.prompt_eval_count} token(s)
-prompt eval duration: ${formatDuration(metrics.prompt_eval_duration)}
-prompt eval rate:     ${(metrics.prompt_eval_count / (metrics.prompt_eval_duration / 1e9)).toFixed(2)} tokens/s
-eval count:           ${metrics.eval_count} token(s)
-eval duration:        ${formatDuration(metrics.eval_duration)}
-eval rate:            ${(metrics.eval_count / (metrics.eval_duration / 1e9)).toFixed(2)} tokens/s
-`;
-
-    // Format final output
-    let finalOutput = formattedEvaluation;
-    finalOutput += `\nOverall Comments: Evaluation completed using ${args.modelName}.\n${metricsOutput}`;
-
-    // Display output
-    console.log(finalOutput);
-
-    // Create a flag indicator for the filename
-    const justFlag = args.showJustification ? '' : '_no-just';
-
-    // Write to file with total score and duration in name
+    // Write the simplified JSON file with pc_no included in the filename
     const dateStr = getFormattedDate();
-    const totalDurationSeconds = Math.round(metrics.total_duration / 1e9); // Convert nanoseconds to seconds and round
-    const outputFileName = `scoredResponse_${totalScore}${justFlag}_${totalDurationSeconds}_${args.modelName.replace(':', '_')}_${dateStr}.txt`;
-    const outputPath = path.join(__dirname, outputFileName);
-    await fs.writeFile(outputPath, finalOutput);
-    console.log(`Evaluation written to ${outputFileName}`);
-
-    // Export the result as JSON
-    const jsonFileName = `scoredResponse_${totalScore}${justFlag}_${totalDurationSeconds}_${args.modelName.replace(':', '_')}_${dateStr}.json`;
+    const jsonFileName = `simplifiedScore_${pcNo}_${args.modelName.replace(':', '_')}_${dateStr}.json`;
     const jsonPath = path.join(__dirname, jsonFileName);
-    await fs.writeFile(jsonPath, JSON.stringify(resultObject, null, 2));
-    console.log(`JSON result written to ${jsonFileName}`);
+    console.log('Debug: Writing JSON to file:', jsonPath);
+    await fs.writeFile(jsonPath, JSON.stringify(simplifiedResult, null, 2));
+    console.log(`Simplified JSON result written to ${jsonFileName}`);
 
-    // Return the result object
-    return resultObject;
-
+    // Still generate the original full output for reference
+    console.log(`Evaluation completed using ${args.modelName}.`);
+    
+    return simplifiedResult;
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    console.error(`Debug: ERROR CAUGHT: ${error.message}`);
+    console.error(`Debug: Error stack:`, error.stack);
     process.exit(1);
   }
 }
