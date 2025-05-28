@@ -1,0 +1,23 @@
+{
+  "pc_no": "C02D6R",
+  "modelName": "gemma2:2b-instruct-q4_0",
+  "responseFileName": "resp-mid.txt",
+  "runAt": "250528-1637",
+  "scores": {
+    "accurate": 4,
+    "relevant": 4,
+    "organization": 3,
+    "totalScore": "73.3",
+    "weightedScore": "76.7"
+  },
+  "performanceMetrics": {
+    "totalDuration": "33.57",
+    "loadDuration": "0.03",
+    "promptEvalCount": 1221,
+    "promptEvalDuration": "10.98",
+    "promptEvalRate": "111.25",
+    "evalCount": 316,
+    "evalDuration": "22.56",
+    "evalRate": "14.01"
+  }
+}

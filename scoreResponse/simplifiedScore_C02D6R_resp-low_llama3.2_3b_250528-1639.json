@@ -1,0 +1,23 @@
+{
+  "pc_no": "C02D6R",
+  "modelName": "llama3.2:3b",
+  "responseFileName": "resp-low.txt",
+  "runAt": "250528-1639",
+  "scores": {
+    "accurate": 1,
+    "relevant": 1,
+    "organization": 2,
+    "totalScore": "26.7",
+    "weightedScore": "23.3"
+  },
+  "performanceMetrics": {
+    "totalDuration": "24.91",
+    "loadDuration": "0.02",
+    "promptEvalCount": 920,
+    "promptEvalDuration": "8.40",
+    "promptEvalRate": "109.48",
+    "evalCount": 197,
+    "evalDuration": "16.49",
+    "evalRate": "11.95"
+  }
+}

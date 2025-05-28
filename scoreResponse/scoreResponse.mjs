@@ -105,7 +105,7 @@ Score 3: Response mostly addresses the prompt but includes some unnecessary info
 Score 2: Response partially addresses the prompt with significant omissions or irrelevant content.
 Score 1: Response barely addresses or misses the prompt entirely.
 
--##Organized (1-5)
+-##Organization (1-5)
 The logical structure, organization, and flow of the response.
 
 Score 5: Exceptionally clear, logically organized, with perfect flow between ideas.
@@ -159,6 +159,7 @@ Please provide the evaluation in this exact format.
 function parseArgs() {
   const args = {
     modelName: null,
+    responseFileName: null, // No default - will be required
     showJustification: true,
   };
 
@@ -167,11 +168,19 @@ function parseArgs() {
       args.showJustification = false;
     } else if (!args.modelName) {
       args.modelName = process.argv[i];
+    } else if (!args.responseFileName) {
+      args.responseFileName = process.argv[i]; // This will be the third argument
     }
   }
 
+  if (!args.modelName || !args.responseFileName) {
+  console.error('Please provide an Ollama model name and a response filename (e.g., node scoreResponse.mjs llama3:8b response.txt [--no-justification])');
+  process.exit(1);
+}
+
   return args;
 }
+
 
 // Extract scores from evaluation text
 function extractScores(evaluation) {
@@ -208,7 +217,7 @@ async function main() {
     const pcNo = await getPCNumber();
     console.log('Debug: pc_no obtained:', pcNo);
 
-    // Read input files
+ // Read input files
     console.log('Debug: Reading input files...');
     const userPrompt = await readFileContent('prompt-user.txt');
     console.log('Debug: User prompt loaded, length:', userPrompt.length);
@@ -216,7 +225,7 @@ async function main() {
     const systemPrompt = await readFileContent('prompt-system.txt');
     console.log('Debug: System prompt loaded, length:', systemPrompt.length);
     
-    const response = await readFileContent('response.txt');
+    const response = await readFileContent(args.responseFileName);
     console.log('Debug: Response loaded, length:', response.length);
 
     // Evaluate response
@@ -234,11 +243,14 @@ async function main() {
     const simplifiedResult = {
       pc_no: pcNo,
       modelName: args.modelName,
-      datetime: new Date().toISOString(),
+      responseFileName: args.responseFileName,
+      runAt: getFormattedDate(new Date().toISOString()),
       scores: {
         accurate: scores.accurate || 0,
         relevant: scores.relevant || 0,
-        organized: scores.organization || 0
+        organization: scores.organization || 0,
+        totalScore: ((scores.accurate + scores.relevant + scores.organization) / 15 * 100).toFixed(1) ,
+        weightedScore: (((scores.accurate * 3) + (scores.relevant * 2) + (scores.organization * 1)) / 30 * 100).toFixed(1) 
       },
       performanceMetrics: {
         totalDuration: formatDuration(metrics.total_duration),
@@ -255,7 +267,12 @@ async function main() {
 
     // Write the simplified JSON file with pc_no included in the filename
     const dateStr = getFormattedDate();
-    const jsonFileName = `simplifiedScore_${pcNo}_${args.modelName.replace(':', '_')}_${dateStr}.json`;
+    
+    // Extract the base name of the response file (without extension)
+    const responseBaseName = path.basename(args.responseFileName, path.extname(args.responseFileName));
+
+    // Create the output filename with the response base name included
+    const jsonFileName = `simplifiedScore_${pcNo}_${responseBaseName}_${args.modelName.replace(':', '_')}_${dateStr}.json`;
     const jsonPath = path.join(__dirname, jsonFileName);
     console.log('Debug: Writing JSON to file:', jsonPath);
     await fs.writeFile(jsonPath, JSON.stringify(simplifiedResult, null, 2));
