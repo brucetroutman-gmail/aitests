@@ -75,15 +75,15 @@ async function createDatabase() {
 
   try {
     const [rows] = await connection.query(
-      "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'performance_data'"
+      "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'modelPerformance'"
     );
 
     if (rows.length === 0) {
-      console.log("Creating performance_data database...");
-      await connection.query('CREATE DATABASE performance_data');
+      console.log("Creating modelPerformance database...");
+      await connection.query('CREATE DATABASE modelPerformance');
       console.log("Database created successfully");
     } else {
-      console.log("Database performance_data already exists");
+      console.log("Database modelPerformance already exists");
     }
   } catch (err) {
     console.error("Database creation error:", err);
@@ -94,7 +94,7 @@ async function createDatabase() {
 
   const pool = await mysql.createPool({
     ...dbConfig,
-    database: 'performance_data',
+    database: 'modelPerformance',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
