@@ -1,0 +1,23 @@
+{
+  "pc_no": "C02D6R",
+  "modelName": "llama3.2:3b",
+  "responseFileName": "resp-high.txt",
+  "runAt": "250604-1048",
+  "scores": {
+    "accurate": 5,
+    "relevant": 4,
+    "organization": 5,
+    "totalScore": "93.3",
+    "weightedScore": "93.3"
+  },
+  "performanceMetrics": {
+    "totalDuration": "112.77",
+    "loadDuration": "8.22",
+    "promptEvalCount": 1915,
+    "promptEvalDuration": "68.39",
+    "promptEvalRate": "28.00",
+    "evalCount": 255,
+    "evalDuration": "36.16",
+    "evalRate": "7.05"
+  }
+}

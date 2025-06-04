@@ -1,0 +1,23 @@
+{
+  "pc_no": "C02D6R",
+  "modelName": "phi4-mini:3.8b-q4_K_M",
+  "responseFileName": "resp-low.txt",
+  "runAt": "250604-1043",
+  "scores": {
+    "accurate": 1,
+    "relevant": 0,
+    "organization": 1,
+    "totalScore": "13.3",
+    "weightedScore": "13.3"
+  },
+  "performanceMetrics": {
+    "totalDuration": "40.51",
+    "loadDuration": "0.04",
+    "promptEvalCount": 898,
+    "promptEvalDuration": "15.37",
+    "promptEvalRate": "58.42",
+    "evalCount": 177,
+    "evalDuration": "25.10",
+    "evalRate": "7.05"
+  }
+}

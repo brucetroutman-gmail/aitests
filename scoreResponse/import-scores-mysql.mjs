@@ -11,7 +11,7 @@ const config = {
   host: '45.32.219.12',
   user: 'nimdas', // Change to your MySQL username
   password: 'FormR!1234', // Change to your MySQL password
-  database: 'scoredResponses',
+  database: 'scoredResponsesBaseTest',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0

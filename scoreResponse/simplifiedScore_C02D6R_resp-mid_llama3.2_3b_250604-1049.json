@@ -1,0 +1,23 @@
+{
+  "pc_no": "C02D6R",
+  "modelName": "llama3.2:3b",
+  "responseFileName": "resp-mid.txt",
+  "runAt": "250604-1049",
+  "scores": {
+    "accurate": 4,
+    "relevant": 5,
+    "organization": 3,
+    "totalScore": "80.0",
+    "weightedScore": "83.3"
+  },
+  "performanceMetrics": {
+    "totalDuration": "57.93",
+    "loadDuration": "0.06",
+    "promptEvalCount": 1136,
+    "promptEvalDuration": "28.25",
+    "promptEvalRate": "40.21",
+    "evalCount": 203,
+    "evalDuration": "29.61",
+    "evalRate": "6.85"
+  }
+}

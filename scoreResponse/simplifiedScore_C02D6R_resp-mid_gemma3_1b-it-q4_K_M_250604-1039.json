@@ -1,0 +1,23 @@
+{
+  "pc_no": "C02D6R",
+  "modelName": "gemma3:1b-it-q4_K_M",
+  "responseFileName": "resp-mid.txt",
+  "runAt": "250604-1039",
+  "scores": {
+    "accurate": 4,
+    "relevant": 5,
+    "organization": 3,
+    "totalScore": "80.0",
+    "weightedScore": "83.3"
+  },
+  "performanceMetrics": {
+    "totalDuration": "25.10",
+    "loadDuration": "0.06",
+    "promptEvalCount": 1227,
+    "promptEvalDuration": "9.55",
+    "promptEvalRate": "128.43",
+    "evalCount": 356,
+    "evalDuration": "15.49",
+    "evalRate": "22.99"
+  }
+}
