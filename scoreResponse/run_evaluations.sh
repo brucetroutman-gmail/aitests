@@ -2,10 +2,22 @@
 
 # Define arrays of models and response files
 MODELS=(
-  "gemma3:1b-it-q4_K_M"
-  "phi4-mini:3.8b-q4_K_M"
+  "qwen2:0.5b"
+  "qwen2:1.5b"
+  "gemma2:2b"
   "gemma2:2b-instruct-q4_0"
+  "gemma3:lb"
+  "gemma3:1b-it-q4_K_M"
+  "gemma3:4b"
+  "granite3.3:2b"
+  "granite3.3:8b"
+  "internlm2:latest"
+  "llama3.1:8b"
   "llama3.2:3b"
+  "mistral:7b"
+  "mistral:7b-instruct"
+  "phi4-mini:latest"
+  "phi4-mini:3.8b-q4_K_M"
 )
 
 RESPONSES=(
