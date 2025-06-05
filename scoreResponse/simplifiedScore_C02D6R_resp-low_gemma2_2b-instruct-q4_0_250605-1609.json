@@ -2,7 +2,7 @@
   "pc_no": "C02D6R",
   "modelName": "gemma2:2b-instruct-q4_0",
   "responseFileName": "resp-low.txt",
-  "runAt": "250604-1046",
+  "runAt": "250605-1609",
   "scores": {
     "accurate": 1,
     "relevant": 2,
@@ -11,13 +11,13 @@
     "weightedScore": "26.7"
   },
   "performanceMetrics": {
-    "totalDuration": "33.66",
+    "totalDuration": "26.41",
     "loadDuration": "0.04",
     "promptEvalCount": 922,
-    "promptEvalDuration": "9.49",
-    "promptEvalRate": "97.17",
-    "evalCount": 235,
-    "evalDuration": "24.13",
-    "evalRate": "9.74"
+    "promptEvalDuration": "8.52",
+    "promptEvalRate": "108.19",
+    "evalCount": 226,
+    "evalDuration": "17.84",
+    "evalRate": "12.67"
   }
 }

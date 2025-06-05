@@ -2,7 +2,7 @@
   "pc_no": "C02D6R",
   "modelName": "llama3.2:3b",
   "responseFileName": "resp-high.txt",
-  "runAt": "250604-1048",
+  "runAt": "250605-1610",
   "scores": {
     "accurate": 5,
     "relevant": 4,
@@ -11,13 +11,13 @@
     "weightedScore": "93.3"
   },
   "performanceMetrics": {
-    "totalDuration": "112.77",
-    "loadDuration": "8.22",
+    "totalDuration": "79.69",
+    "loadDuration": "8.38",
     "promptEvalCount": 1915,
-    "promptEvalDuration": "68.39",
-    "promptEvalRate": "28.00",
-    "evalCount": 255,
-    "evalDuration": "36.16",
-    "evalRate": "7.05"
+    "promptEvalDuration": "47.56",
+    "promptEvalRate": "40.26",
+    "evalCount": 250,
+    "evalDuration": "23.75",
+    "evalRate": "10.53"
   }
 }

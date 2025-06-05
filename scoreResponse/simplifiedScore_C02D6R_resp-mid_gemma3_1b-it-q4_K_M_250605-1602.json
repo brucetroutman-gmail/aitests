@@ -2,7 +2,7 @@
   "pc_no": "C02D6R",
   "modelName": "gemma3:1b-it-q4_K_M",
   "responseFileName": "resp-mid.txt",
-  "runAt": "250604-1039",
+  "runAt": "250605-1602",
   "scores": {
     "accurate": 4,
     "relevant": 5,
@@ -11,13 +11,13 @@
     "weightedScore": "83.3"
   },
   "performanceMetrics": {
-    "totalDuration": "25.10",
+    "totalDuration": "23.01",
     "loadDuration": "0.06",
     "promptEvalCount": 1227,
-    "promptEvalDuration": "9.55",
-    "promptEvalRate": "128.43",
-    "evalCount": 356,
-    "evalDuration": "15.49",
-    "evalRate": "22.99"
+    "promptEvalDuration": "8.90",
+    "promptEvalRate": "137.88",
+    "evalCount": 359,
+    "evalDuration": "14.05",
+    "evalRate": "25.55"
   }
 }

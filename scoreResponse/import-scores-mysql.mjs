@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 // MySQL connection configuration
 const config = {
-  host: '45.32.219.12',
+  host: '92.112.184.206',
   user: 'nimdas', // Change to your MySQL username
   password: 'FormR!1234', // Change to your MySQL password
   database: 'scoredResponsesBaseTest',
