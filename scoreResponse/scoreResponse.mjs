@@ -184,15 +184,24 @@ function parseArgs() {
 
 // Extract scores from evaluation text
 function extractScores(evaluation) {
+  
   const scores = {};
   const scoreRegex = /\*\*(Accurate|Relevant|Organization)\*\*: (\d+)/g;
-  
+
   let match;
   while ((match = scoreRegex.exec(evaluation)) !== null) {
     const criterion = match[1].toLowerCase();
     scores[criterion] = parseInt(match[2], 10);
   }
   
+  if (
+  typeof scores.accurate !== 'number' || isNaN(scores.accurate) ||
+  typeof scores.relevant !== 'number' || isNaN(scores.relevant) ||
+  typeof scores.organization !== 'number' || isNaN(scores.organization)
+) {
+  console.error('Invalid score detected: One or more criteria are not numbers.');
+  process.exit(1);
+}
   return scores;
 }
 

@@ -1,0 +1,23 @@
+{
+  "pc_no": "C02D6R",
+  "modelName": "qwen2:1.5b",
+  "responseFileName": "resp-high.txt",
+  "runAt": "250607-1324",
+  "scores": {
+    "accurate": 5,
+    "relevant": 5,
+    "organization": 5,
+    "totalScore": "100.0",
+    "weightedScore": "100.0"
+  },
+  "performanceMetrics": {
+    "totalDuration": "38.03",
+    "loadDuration": "1.94",
+    "promptEvalCount": 2036,
+    "promptEvalDuration": "22.00",
+    "promptEvalRate": "92.54",
+    "evalCount": 316,
+    "evalDuration": "14.09",
+    "evalRate": "22.42"
+  }
+}
