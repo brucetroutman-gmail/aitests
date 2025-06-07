@@ -194,14 +194,22 @@ function extractScores(evaluation) {
     scores[criterion] = parseInt(match[2], 10);
   }
   
-  if (
-  typeof scores.accurate !== 'number' || isNaN(scores.accurate) ||
-  typeof scores.relevant !== 'number' || isNaN(scores.relevant) ||
-  typeof scores.organization !== 'number' || isNaN(scores.organization)
-) {
-  console.error('Invalid score detected: One or more criteria are not numbers.');
+  const failedScores = [];
+if (
+  typeof scores.accurate !== 'number' || isNaN(scores.accurate) || scores.accurate === 0
+) failedScores.push('accurate');
+if (
+  typeof scores.relevant !== 'number' || isNaN(scores.relevant) || scores.relevant === 0
+) failedScores.push('relevant');
+if (
+  typeof scores.organization !== 'number' || isNaN(scores.organization) || scores.organization === 0
+) failedScores.push('organization');
+
+if (failedScores.length > 0) {
+  console.error(`Invalid or zero score detected for: ${failedScores.join(', ')}`);
   process.exit(1);
 }
+
   return scores;
 }
 
