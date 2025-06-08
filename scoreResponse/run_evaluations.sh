@@ -16,8 +16,6 @@ MODELS=(
   "llama3.2:3b"
   "mistral:7b"
   "mistral:7b-instruct"
-  "phi4-mini:latest"
-  "phi4-mini:3.8b-q4_K_M"
 )
 
 RESPONSES=(
